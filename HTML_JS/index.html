@@ -2,19 +2,57 @@
 <html>
     <head>
         <title>CSV Report</title>
-        <script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.9.2/jquery-ui.min.js"></script>
+    	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+        <script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.9.2/jquery-ui.min.js"></script>
+		
+        <script>
+        
+        // This is where all the magic happens!
+		function calculateReport() {
+            var data = {};
+            var out = "";
+			var inString = $('#input').text();
+			var lines = inString.split("\n");
+
+            // Gather all the necessary data in Javascript's version of a 'dictionary'.
+            // In Javascript it is basically an array of objects.
+			for (var i = 0; i < lines.length; i++) {
+				var line = lines[i];
+				var parts = line.split(",");
+                var key = parts[0];
+
+                if (! data.hasOwnProperty(key)) {
+                    data[key] = [];
+                }
+                data[key].push(parts[1]);
+			}
+
+            // Iterate on the entire data.
+            for (var p in data) {
+                var timeSpent = 0.0;
+                for (var t in data[p]) {
+                    // Just like the Java program, this could get time-expensive.
+                    // There's a better way to implement this part for better complexity.
+                    timeSpent += parseFloat(data[p][t]);
+                }
+                var averageTimeSpent = timeSpent / data[p].length;
+                out += p + " spent " + data[p].length + " events, and an average of " + averageTimeSpent + " time per event<br/>";
+                // Prepare the output!
+            }
+
+            $('#report').html(out); // Time to show what we're got!
+		}
+		</script>
     </head>
+    
     <body>
         <h1>CSV Report</h1>
         <p>Input:</p>
-        <textarea id='input' cols="40" rows="12">
-        </textarea>
+        <textarea id="input" cols="40" rows="12"></textarea>
         <br>
-        <button id='calculate'>Calculate</button>
+        <button id="calculate" onclick="calculateReport()">Calculate</button>
         <p>Report</p>
-        <div id='report'>
-            <!-- Report comes here -->
-        </div>
+        <div id="report"></div>
     </body>
 
 </html>

@@ -116,8 +116,8 @@ def get_data_dict(filepath):
 	d = {}
 	# I have used a dictionary here because while we don't want the names
 	# to change (which will be the immutable keys), we do want the
-	# statistics (which will be the 2-item lists) on each person to
-	# be mutable.  The dictionary will also provide excellent complexity:
+	# statistics (which will be the mutable values) on each person to
+	# be changeable.  The dictionary will also provide excellent complexity:
 	# 	-> O(1) to set an item (avg)
 	#	-> O(1) to get an item (avg)
 
@@ -130,7 +130,7 @@ def get_data_dict(filepath):
 			l = line.rstrip('\n').split(sep=',') # Cleans up the data
 			
 			if l[0] not in d.keys():
-				d[l[0]] = [float(l[1]), 1] 
+				d[l[0]] = (float(l[1]), 1)
 				# Floats will ensure closer approximations and 
 				# let the user customize accuracy.
 			else:
